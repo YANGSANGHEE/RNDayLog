@@ -6,7 +6,7 @@ import axios from 'axios';
 const LogContext = createContext();
 
 export const LogContextProvider = ({children}) => {
-  const [data, setData] = useState([]);
+  const [dataset, setDataSet] = useState(false);
 
   const onCreate = useCallback(async ({title, con}) => {
     await axios
@@ -16,6 +16,7 @@ export const LogContextProvider = ({children}) => {
         con: con,
       })
       .then(res => {
+        setDataSet(true);
         console.log(res);
       })
       .catch(err => {
@@ -23,7 +24,9 @@ export const LogContextProvider = ({children}) => {
       });
   }, []);
   return (
-    <LogContext.Provider value={{onCreate}}>{children}</LogContext.Provider>
+    <LogContext.Provider value={{onCreate, dataset}}>
+      {children}
+    </LogContext.Provider>
   );
 };
 

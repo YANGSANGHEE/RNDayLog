@@ -1,23 +1,21 @@
-import React, {useState, useEffect, memo} from 'react';
+import React, {useState, useEffect, memo, useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import FloatingWriteButton from '../components/FloatingWriteButton';
 import FeedList from '../components/FeedList';
+import LogContext from '../contexts/LogContext';
 import axios from 'axios';
 
 const FeedsScreen = () => {
   const [data, setData] = useState([]);
-  const [dataset, setDataSet] = useState(false);
   let act = 'list';
+  let {dataset} = useContext(LogContext);
 
   //daylog 조회
   const onList = async () => {
     await axios
       .get(`http://10.0.2.2:8084/dayloglist/${act}`)
       .then(res => {
-        if (!dataset) {
-          setData(res.data);
-          setDataSet(true);
-        }
+        setData(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -26,7 +24,6 @@ const FeedsScreen = () => {
   //게시글조회
   useEffect(() => {
     onList();
-    setDataSet(false);
   }, [dataset]);
 
   return (
