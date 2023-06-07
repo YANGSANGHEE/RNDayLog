@@ -6,6 +6,8 @@ import axios from 'axios';
 const LogContext = createContext();
 
 export const LogContextProvider = ({children}) => {
+  const [data, setData] = useState([]);
+
   const onCreate = useCallback(async ({title, con}) => {
     await axios
       .post('http://10.0.2.2:8084/daylogwrite', {
@@ -20,7 +22,6 @@ export const LogContextProvider = ({children}) => {
         console.log(err);
       });
   }, []);
-
   return (
     <LogContext.Provider value={{onCreate}}>{children}</LogContext.Provider>
   );

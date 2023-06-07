@@ -18,7 +18,7 @@ const WriteScreen = () => {
       title: title,
       con: body,
     });
-    navigation.pop();
+    navigation.navigate('Main');
   };
 
   return (

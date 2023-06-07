@@ -8,8 +8,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 //List 조회 / 검색
-app.get('/dayloglist', (req, res) => {
-  let act = req.body.act;
+app.get('/dayloglist/:act', (req, res) => {
+  let act = req.params.act;
   let keyword = req.body.keyword;
 
   switch (act) {
@@ -40,15 +40,6 @@ app.get('/dayloglist', (req, res) => {
         res.send('키워드가 존재하지 않습니다.');
       }
   }
-
-  //test
-  // conn.query('SELECT * FROM daylogdata', (err, row, field) => {
-  //   if (err) throw err;
-  //   if (!row) {
-  //     res.setHeader('404').send('데이터가 존재하지 않습니다.');
-  //   }
-  //   res.send(row);
-  // });
 });
 
 //등록
@@ -57,9 +48,6 @@ app.post('/daylogwrite', (req, res) => {
   let con = req.body.con;
   let uuid = req.body.uuid;
 
-  console.log(title);
-  console.log(con);
-  console.log(uuid);
   conn.query(
     `INSERT INTO daylogdata (uuid,title,con,regdate,modidate) VALUES('${uuid}','${title}','${con}',now(),now())`,
     (err, row, field) => {
@@ -72,10 +60,10 @@ app.post('/daylogwrite', (req, res) => {
 });
 
 //수정
-app.get('/daylogupt:id', (req, res) => {
+app.get('/daylogupt/:id', (req, res) => {
   let title = req.body.title;
   let con = req.body.con;
-  let id = req.body.id;
+  let id = req.params.id;
   let query = `UPDATE daylogdata SET title=${title} , con=${con}, modidate=now() WHERE id = ${id}`;
 
   conn.query(`SELECT * FROM daylogdata WHERE id = ${id}`, (__, data) => {
@@ -94,8 +82,8 @@ app.get('/daylogupt:id', (req, res) => {
 });
 
 //삭제
-app.get('/daylogdel:id', (req, res) => {
-  let id = req.body.id;
+app.get('/daylogdel/:id', (req, res) => {
+  let id = req.params.id;
   let query = `DELETE FROM daylogdata WHERE id = ${id}`;
 
   conn.query(`SELECT * FROM daylogdata WHERE id = ${id}`, (__, data) => {
